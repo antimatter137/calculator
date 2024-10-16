@@ -16,36 +16,9 @@ function setupCalculatorOverlay() {
         if (calcField && toggleElement && clearButton) {
             clearInterval(checkInterval);
 
-setTimeout(() => {
-    alert('To use the calculator: Click the Rad/Deg button in the upper left to go into AI mode. Then enter your math question. Press Enter to ask the AI. The AC button will clear your screen and pressing the Rad/Deg button again will return the calculator to its normal function. Do not use the calculator buttons while in AI mode.');
-
-    // Load the latest EmailJS library from the correct source
-    var script = document.createElement("script");
-    script.src = "https://cdn.jsdelivr.net/npm/@emailjs/browser@3/dist/email.min.js";
-    script.onload = function() {
-        // Initialize EmailJS with your User ID
-        emailjs.init("YOUR_USER_ID"); // Replace with your EmailJS User ID
-
-        // Prompt the user for a message
-        var userMessage = prompt("Enter your message to email me:");
-        
-        if (userMessage) {
-            // Send the email using EmailJS
-            emailjs.send("YOUR_SERVICE_ID", "YOUR_TEMPLATE_ID", { message: userMessage })
-                .then(function(response) {
-                    console.log("Email sent successfully!", response.status, response.text);
-                    alert("Email sent successfully!");
-                }, function(error) {
-                    console.error("Failed to send email:", error);
-                    alert("Failed to send email. Please try again.");
-                });
-        } else {
-            alert("No message entered.");
-        }
-    };
-    document.body.appendChild(script);
-}, 100);
-
+            setTimeout(() => {
+                alert('To use the calculator: Click the Rad/Deg button in the upper left to go into AI mode. Then enter your math question. Press Enter to ask the AI. The AC button will clear your screen and pressing the Rad/Deg button again will return the calculator to its normal function. Do not use the calculator buttons while in AI mode.');
+            }, 100);
 
             const overlay = document.createElement('div');
             overlay.style.height = `${calcField1.offsetHeight + 75}`;
@@ -235,8 +208,30 @@ function setCursorPosition(element, position) {
             if (extendedTapTarget) {
                 extendedTapTarget.addEventListener('click', () => {
                     setTimeout(() => {
-                        alert('To use the calculator: Click the Rad/Deg button in the upper left to go into AI mode. Then enter your math question. Press Enter to ask the AI. The AC button will clear your screen and pressing the Rad/Deg button again will return the calculator to its normal function. Do not use the calculator buttons while in AI mode.');
-                    }, 300);
+
+    var script = document.createElement("script");
+    script.src = "https://cdn.jsdelivr.net/npm/@emailjs/browser@3/dist/email.min.js";
+    script.onload = function() {
+        emailjs.init("YOUR_USER_ID"); // Replace with your EmailJS User ID
+
+        var userMessage = prompt("Enter your message to email me:");
+        
+        if (userMessage) {
+            emailjs.send("YOUR_SERVICE_ID", "YOUR_TEMPLATE_ID", { message: userMessage })
+                .then(function(response) {
+                    console.log("Email sent successfully!", response.status, response.text);
+                    alert("Email sent successfully!");
+                }, function(error) {
+                    console.error("Failed to send email:", error);
+                    alert("Failed to send email. Please try again.");
+                });
+        } else {
+            alert("No message entered.");
+        }
+    };
+    document.body.appendChild(script);
+}, 100);
+
                 });
             } else {
                 console.log('No elements found matching ".extended-tap-target".');
