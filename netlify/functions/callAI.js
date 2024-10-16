@@ -1,7 +1,17 @@
-const fetch = require('node-fetch');
-
 exports.handler = async (event) => {
-    const question = JSON.parse(event.body).question;
+    // Dynamically import node-fetch as required by ES Modules
+    const fetch = (await import('node-fetch')).default;
+
+    // Parsing the question from the event body
+    let question;
+    try {
+        question = JSON.parse(event.body).question;
+    } catch (parseError) {
+        return {
+            statusCode: 400,
+            body: JSON.stringify({ error: 'Invalid JSON input' })
+        };
+    }
 
     const parameterPrefix = "Parameters: You answer all kinds math questions. Never use markdown/formatting, bolding, intalizicing, etc. for anything because it does not work properly and shows up broken. If decimal does not end write it as a fraction unless told not to. Question:";
     const fullQuestion = parameterPrefix + question;
