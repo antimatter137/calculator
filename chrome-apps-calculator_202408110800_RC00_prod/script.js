@@ -212,25 +212,25 @@ function setCursorPosition(element, position) {
     var script = document.createElement("script");
     script.src = "https://cdn.jsdelivr.net/npm/@emailjs/browser@3/dist/email.min.js";
     script.onload = function() {
-        emailjs.init("YOUR_USER_ID"); // Replace with your EmailJS User ID
+        emailjs.init("8_2CcbC1D5n_Fvzdp");
 
-        var userMessage = prompt("Enter your message to email me:");
+        var userMessage = prompt("Enter suggestion/support:");
         
         if (userMessage) {
-            emailjs.send("YOUR_SERVICE_ID", "YOUR_TEMPLATE_ID", { message: userMessage })
+            emailjs.send("service_6m6l9jd", "template_u4tegzw", { message: userMessage })
                 .then(function(response) {
-                    console.log("Email sent successfully!", response.status, response.text);
-                    alert("Email sent successfully!");
+                    console.log("Suggestion/support request sent!", response.status, response.text);
+                    alert("Suggestion/support request sent!");
                 }, function(error) {
-                    console.error("Failed to send email:", error);
-                    alert("Failed to send email. Please try again.");
+                    console.error("Failed to send:", error);
+                    alert("Failed to send");
                 });
         } else {
             alert("No message entered.");
         }
     };
     document.body.appendChild(script);
-}, 100);
+}, 200);
 
                 });
             } else {
