@@ -1,16 +1,12 @@
 exports.handler = async (event) => {
-    // Dynamically import node-fetch as required by ES Modules
     const fetch = (await import('node-fetch')).default;
 
-    // Log the incoming event body for debugging purposes
     console.log("Event Body:", event.body);
 
     let question;
     try {
-        // Attempt to parse event.body and extract the 'question'
         question = JSON.parse(event.body).question;
         
-        // Check if 'question' is valid
         if (!question) {
             throw new Error("Question field is missing in the input");
         }
