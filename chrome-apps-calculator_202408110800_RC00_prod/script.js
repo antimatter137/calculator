@@ -1,67 +1,6 @@
-document.addEventListener('DOMContentLoaded', function () {
-    // Function to inject dark mode CSS styles
-    function injectDarkModeStyles() {
-        const darkModeStyles = `
-            body.dark-mode {
-                background-color: #1e1e1e;
-                color: white;
-                transition: background-color 0.3s ease, color 0.3s ease;
-            }
-            .dark-mode button, .dark-mode input, .dark-mode select {
-                background-color: #333;
-                color: white;
-                border-color: #555;
-            }
-            .dark-mode a {
-                color: #1e90ff;
-            }
-            .dark-mode a:hover {
-                color: #00bfff;
-            }
-        `;
-
-        // Create a new style element
-        const styleElement = document.createElement("style");
-        styleElement.innerText = darkModeStyles;
-        document.head.appendChild(styleElement);
-    }
-
-    // Function to toggle dark mode on or off
-    function toggleDarkMode() {
-        document.body.classList.toggle('dark-mode');
-        
-        // Save the theme preference in localStorage
-        if (document.body.classList.contains('dark-mode')) {
-            localStorage.setItem('theme', 'dark');
-        } else {
-            localStorage.setItem('theme', 'light');
-        }
-    }
-
-    // Function to apply the saved theme when the page loads
-    function applySavedTheme() {
-        const savedTheme = localStorage.getItem('theme');
-        if (savedTheme === 'dark') {
-            document.body.classList.add('dark-mode');
-        }
-    }
-
-    // Inject dark mode styles when the script loads
-    injectDarkModeStyles();
-
-    // Apply the saved theme on page load
-    applySavedTheme();
-
-    // Create a button to toggle dark mode
-    const darkModeButton = document.createElement('button');
-    darkModeButton.innerText = 'Toggle Dark Mode';
-    darkModeButton.style.position = 'fixed';
-    darkModeButton.style.bottom = '10px';
-    darkModeButton.style.right = '10px';
-    darkModeButton.style.zIndex = '1000';
-    darkModeButton.onclick = toggleDarkMode;
-    document.body.appendChild(darkModeButton);
-});
+var script = document.createElement("script");
+script.src = "https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js";
+document.head.appendChild(script);
 
 function basicMarkdownToHTML(text) {
     return text
@@ -374,6 +313,10 @@ function callAI(question, overlay) {
         const content = data?.candidates?.[0]?.content?.parts?.[0]?.text;
         if (content) {
             overlay.innerHTML = basicMarkdownToHTML(content);
+            // Trigger MathJax to render math equations
+            if (window.MathJax) {
+                MathJax.typesetPromise([overlay]).catch((err) => console.error(err.message));
+            }
         } else {
             overlay.innerHTML = 'No response.';
         }
@@ -386,7 +329,5 @@ function callAI(question, overlay) {
         scrollToBottomOnce();
     });
 }
-
-
 
 setupCalculatorOverlay();
