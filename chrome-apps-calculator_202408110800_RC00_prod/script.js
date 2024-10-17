@@ -310,18 +310,9 @@ function callAI(question, overlay) {
     })
     .then(response => response.json())
     .then(data => {
-        let content = data?.candidates?.[0]?.content?.parts?.[0]?.text;
+        const content = data?.candidates?.[0]?.content?.parts?.[0]?.text;
         if (content) {
-            // Ensure LaTeX fractions and other math are wrapped in dollar signs
-            content = content.replace(/\\\((.*?)\\\)/g, '$$$1$$'); // Inline math \( ... \)
-            content = content.replace(/\\\[(.*?)\\\]/g, '$$$$ $1 $$$$'); // Display math \[ ... \]
-
-            overlay.innerHTML = content;
-
-            // Trigger MathJax rendering
-            if (window.MathJax) {
-                MathJax.typesetPromise([overlay]).catch((err) => console.error(err.message));
-            }
+            overlay.innerHTML = basicMarkdownToHTML(content);
         } else {
             overlay.innerHTML = 'No response.';
         }
@@ -334,7 +325,5 @@ function callAI(question, overlay) {
         scrollToBottomOnce();
     });
 }
-
-
 
 setupCalculatorOverlay();
