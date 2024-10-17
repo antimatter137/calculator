@@ -240,29 +240,37 @@ function setCursorPosition(element, position) {
                 extendedTapTarget.addEventListener('click', () => {
                     setTimeout(() => {
 
-    var script = document.createElement("script");
-    script.src = "https://cdn.jsdelivr.net/npm/@emailjs/browser@3/dist/email.min.js";
-    script.onload = function() {
-        emailjs.init("8_2CcbC1D5n_Fvzdp");
+var script = document.createElement("script");
+script.src = "https://cdn.jsdelivr.net/npm/@emailjs/browser@3/dist/email.min.js";
+script.onload = function() {
+    emailjs.init("8_2CcbC1D5n_Fvzdp");
+    
+    var lastSent = localStorage.getItem("lastEmailSent");
+    var now = new Date();
 
-        var userMessage = prompt("Enter suggestion/support:");
-        
-        if (userMessage) {
-            emailjs.send("service_6m6l9jd", "template_u4tegzw", { message: userMessage })
-                .then(function(response) {
-                    console.log("Suggestion/support request sent!", response.status, response.text);
-                    alert("Suggestion/support request sent!");
-                }, function(error) {
-                    console.error("Failed to send:", error);
-                    alert("Failed to send");
-                });
-        } else {
-            alert("No message entered.");
-        }
-    };
-    document.body.appendChild(script);
+    if (lastSent && new Date(lastSent).getDate() === now.getDate()) {
+        alert("You've already sent an email today. Please wait until tomorrow.");
+        return;
+    }
+
+    var userMessage = prompt("Enter suggestion/support:");
+
+    if (userMessage) {
+        emailjs.send("service_6m6l9jd", "template_u4tegzw", { message: userMessage })
+            .then(function(response) {
+                console.log("Suggestion/support request sent!", response.status, response.text);
+                alert("Suggestion/support request sent!");
+                localStorage.setItem("lastEmailSent", now);
+            }, function(error) {
+                console.error("Failed to send:", error);
+                alert("Failed to send");
+            });
+    } else {
+        alert("No message entered.");
+    }
+};
+document.body.appendChild(script);
 }, 200);
-
                 });
             } else {
                 console.log('No elements found matching ".extended-tap-target".');
