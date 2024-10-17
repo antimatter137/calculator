@@ -297,7 +297,7 @@ function callAI(question, overlay) {
         localStorage.setItem("lastAICallDate", dateKey);
     }
 
-    if (callCount >= 10) {
+    if (callCount >= 30) {
         overlay.innerHTML = 'You have reached your daily limit of 10 requests.';
         scrollToBottomOnce();
         return;
