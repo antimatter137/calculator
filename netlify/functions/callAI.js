@@ -18,7 +18,7 @@ exports.handler = async (event) => {
         };
     }
 
-    const parameterPrefix = "Parameters: You answer all kinds math questions. If decimal does not end write it as a fraction unless told not to. Question:";
+    const parameterPrefix = "Parameters: You answer all kinds math questions. Never use markdown/formatting, bolding, intalizicing, etc. for anything because it does not work properly and shows up broken. If decimal does not end write it as a fraction unless told not to. Question:";
     const fullQuestion = parameterPrefix + question;
 
     try {

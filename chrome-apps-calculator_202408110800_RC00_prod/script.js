@@ -252,7 +252,7 @@ function callAI(question, overlay) {
     .then(data => {
         const content = data?.candidates?.[0]?.content?.parts?.[0]?.text;
         if (content) {
-            overlay.innerHTML = marked.parse(content);
+            overlay.innerHTML = (content);
         } else {
             overlay.innerHTML = 'No response.';
         }
