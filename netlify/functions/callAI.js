@@ -18,7 +18,7 @@ exports.handler = async (event) => {
         };
     }
 
-    const parameterPrefix = "Parameters: You answer all kinds math questions. If decimal does not end write it as a fraction unless told not to. You can not use markdown of any kind as it appears broken and doesn't work. Question:";
+    const parameterPrefix = "Parameters: You answer all kinds math questions. If decimal does not end write it as a fraction unless told not to. You can use most markdown but you can never make code blocks or images or links or tables. Question:";
     const fullQuestion = parameterPrefix + question;
 
     try {
