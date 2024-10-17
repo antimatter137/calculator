@@ -250,20 +250,21 @@ function callAI(question, overlay) {
     })
     .then(response => response.json())
     .then(data => {
-        if (data.candidates && data.candidates.length > 0 && data.candidates[0].content && data.candidates[0].content.parts && data.candidates[0].content.parts.length > 0) {
-            overlay.innerHTML = data.candidates[0].content.parts[0].text;
-            scrollToBottomOnce();
+        const content = data?.candidates?.[0]?.content?.parts?.[0]?.text;
+        if (content) {
+            overlay.innerHTML = marked(content);
         } else {
             overlay.innerHTML = 'No response.';
-            scrollToBottomOnce();
         }
+        scrollToBottomOnce();
     })
     .catch(error => {
-        console.error('Error fetching response:', error);
+        console.error('Error fetching AI response:', error);
         overlay.innerHTML = 'Error fetching response.';
         scrollToBottomOnce();
     });
 }
+
 
 
 setupCalculatorOverlay();
