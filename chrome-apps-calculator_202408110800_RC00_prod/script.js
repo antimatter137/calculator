@@ -1,4 +1,4 @@
-function basicMarkdownToHTML(text) {
+function enhancedMarkdownToHTML(text) {
     return text
         .replace(/(?:\r\n|\r|\n)/g, '<br>')                  // Newlines to <br>
         .replace(/^### (.+?)(<br>|$)/gm, '<h3>$1</h3>')      // H3 headers
@@ -9,14 +9,14 @@ function basicMarkdownToHTML(text) {
         .replace(/_([\s\S]+?)_/g, '<em>$1</em>')             // Italic
         .replace(/\*([\s\S]+?)\*/g, '<em>$1</em>')           // Italic
         .replace(/\`([\s\S]+?)\`/g, '<code>$1</code>')       // Inline code
-        .replace(/^\> (.+?)(<br>|$)/gm, '<blockquote>$1</blockquote>')
+        .replace(/^\> (.+?)(<br>|$)/gm, '<blockquote>$1</blockquote>') // Blockquotes
         .replace(/(\*\*\*|---)(<br>|$)/g, '<hr>')            // Horizontal rules
-        .replace(/\[([^\]]+)\]\(([^)]+)\)/g, '<a href="$2" target="_blank">$1</a>')
-        .replace(/!\[([^\]]*)\]\(([^)]+)\)/g, '<img alt="$1" src="$2" style="max-width:100%;">')
-        .replace(/~~([\s\S]+?)~~/g, '<del>$1</del>')
-        .replace(/^\* (.+?)(<br>|$)/gm, '<ul><li>$1</li></ul>')
-        .replace(/^\d+\. (.+?)(<br>|$)/gm, '<ol><li>$1</li></ol>')
-        .replace(/^\|(.+)\|(<br>|$)/gm, (match) => {
+        .replace(/\[([^\]]+)\]\(([^)]+)\)/g, '<a href="$2" target="_blank">$1</a>') // Links
+        .replace(/!\[([^\]]*)\]\(([^)]+)\)/g, '<img alt="$1" src="$2" style="max-width:100%;">') // Images
+        .replace(/~~([\s\S]+?)~~/g, '<del>$1</del>')         // Strikethrough
+        .replace(/^\* (.+?)(<br>|$)/gm, '<ul><li>$1</li></ul>') // Unordered lists
+        .replace(/^\d+\. (.+?)(<br>|$)/gm, '<ol><li>$1</li></ol>') // Ordered lists
+        .replace(/^\|(.+)\|(<br>|$)/gm, (match) => {        // Tables
             const cells = match
                 .split('|')
                 .slice(1, -1)
@@ -25,6 +25,7 @@ function basicMarkdownToHTML(text) {
             return `<table><tr>${cells}</tr></table>`;
         });
 }
+
 
 function scrollToBottomOnce() {
     const calcField1 = document.querySelector('.calc-display');
