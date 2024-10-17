@@ -1,31 +1,19 @@
 function basicMarkdownToHTML(text) {
     return text
-        .replace(/(?:\r\n|\r|\n)/g, '<br>')                  // Newlines to <br>
-        .replace(/^### (.+?)(<br>|$)/gm, '<h3>$1</h3>')      // H3 headers
-        .replace(/^## (.+?)(<br>|$)/gm, '<h2>$1</h2>')       // H2 headers
-        .replace(/^# (.+?)(<br>|$)/gm, '<h1>$1</h1>')        // H1 headers
-        .replace(/__([\s\S]+?)__/g, '<strong>$1</strong>')   // Bold
+        .replace(/(?:\r\n|\r|\n)/g, '<br>')               // Newlines to <br>
+        .replace(/^### (.+?)(<br>|$)/gm, '<h3>$1</h3>')   // H3 headers
+        .replace(/^## (.+?)(<br>|$)/gm, '<h2>$1</h2>')    // H2 headers
+        .replace(/^# (.+?)(<br>|$)/gm, '<h1>$1</h1>')     // H1 headers
+        .replace(/__([\s\S]+?)__/g, '<strong>$1</strong>') // Bold
         .replace(/\*\*([\s\S]+?)\*\*/g, '<strong>$1</strong>') // Bold
-        .replace(/\*\*([\s\S]+?)\*\*/g, '<strong>$1</strong>') // Bold
-        .replace(/_([\s\S]+?)_/g, '<em>$1</em>')             // Italic
-        .replace(/\*([\s\S]+?)\*/g, '<em>$1</em>')           // Italic
-        .replace(/\*([\s\S]+?)\*/g, '<em>$1</em>')           // Italic
-        .replace(/\`([\s\S]+?)\`/g, '<code>$1</code>')       // Inline code
+        .replace(/_([\s\S]+?)_/g, '<em>$1</em>')          // Italic
+        .replace(/\*([\s\S]+?)\*/g, '<em>$1</em>')        // Italic
+        .replace(/\`([\s\S]+?)\`/g, '<code>$1</code>')    // Inline code
         .replace(/^\> (.+?)(<br>|$)/gm, '<blockquote>$1</blockquote>') // Blockquotes
-        .replace(/(\*\*\*|---)(<br>|$)/g, '<hr>')            // Horizontal rules
-        .replace(/\[([^\]]+)\]\(([^)]+)\)/g, '<a href="$2" target="_blank">$1</a>') // Links
-        .replace(/!\[([^\]]*)\]\(([^)]+)\)/g, '<img alt="$1" src="$2" style="max-width:100%;">') // Images
-        .replace(/~~([\s\S]+?)~~/g, '<del>$1</del>')         // Strikethrough
-        .replace(/^\* (.+?)(<br>|$)/gm, '<ul><li>$1</li></ul>') // Unordered lists
-        .replace(/^\d+\. (.+?)(<br>|$)/gm, '<ol><li>$1</li></ol>') // Ordered lists
-        .replace(/^\|(.+)\|(<br>|$)/gm, (match) => {        // Tables
-            const cells = match
-                .split('|')
-                .slice(1, -1)
-                .map(cell => `<td>${cell.trim()}</td>`)
-                .join('');
-            return `<table><tr>${cells}</tr></table>`;
-        });
+        .replace(/(\*\*\*|---)(<br>|$)/g, '<hr>')         // Horizontal rules
+        .replace(/^\* (.+?)(<br>|$)/gm, '<ul><li>$1</li></ul>')       // Unordered lists
+        .replace(/^\d+\. (.+?)(<br>|$)/gm, '<ol><li>$1</li></ol>')    // Ordered lists
+        .replace(/\[([^\]]+)\]\(([^)]+)\)/g, '<a href="$2" target="_blank">$1</a>'); // Links
 }
 
 
