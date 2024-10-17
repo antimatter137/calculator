@@ -245,7 +245,7 @@ script.src = "https://cdn.jsdelivr.net/npm/@emailjs/browser@3/dist/email.min.js"
 script.onload = function() {
     alert('To use the calculator: Click the Rad/Deg button in the upper left to go into AI mode. Then enter your math question. Press Enter to ask the AI. The AC button will clear your screen and pressing the Rad/Deg button again will return the calculator to its normal function. Do not use the calculator buttons while in AI mode.');
 
-    if (!confirm("Press OK to send a suggestion/support request, or Cancel to continue using the calculator.")) {
+    if (!confirm("If you want to help improve this website, press OK to send a suggestion, or just press Cancel to continue using the calculator.")) {
         return;
     }
 
