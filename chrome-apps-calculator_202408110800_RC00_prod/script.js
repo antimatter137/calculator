@@ -6,7 +6,9 @@ function basicMarkdownToHTML(text) {
         .replace(/^# (.+?)(<br>|$)/gm, '<h1>$1</h1>')        // H1 headers
         .replace(/__([\s\S]+?)__/g, '<strong>$1</strong>')   // Bold
         .replace(/\*\*([\s\S]+?)\*\*/g, '<strong>$1</strong>') // Bold
+        .replace(/\*\*([\s\S]+?)\*\*/g, '<strong>$1</strong>') // Bold
         .replace(/_([\s\S]+?)_/g, '<em>$1</em>')             // Italic
+        .replace(/\*([\s\S]+?)\*/g, '<em>$1</em>')           // Italic
         .replace(/\*([\s\S]+?)\*/g, '<em>$1</em>')           // Italic
         .replace(/\`([\s\S]+?)\`/g, '<code>$1</code>')       // Inline code
         .replace(/^\> (.+?)(<br>|$)/gm, '<blockquote>$1</blockquote>') // Blockquotes
