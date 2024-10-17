@@ -251,29 +251,29 @@ function setCursorPosition(element, position) {
         }
     }, 500);
 }
-            function callAI(question, overlay) {
-                fetch("/.netlify/functions/callAI", {
-                    method: "POST",
-                    headers: { "Content-Type": "application/json" },
-                    body: JSON.stringify({ question })
-                })
-                .then(response => response.json())
-                .then(data => {
-                    if (data.candidates && data.candidates.length > 0 && data.candidates[0].content && data.candidates[0].content.parts && data.candidates[0].content.parts.length > 0) {
-                        overlay.innerHTML = window.md.render(data.candidates[0].content.parts[0].text);
-                    } else {
-                        overlay.innerHTML = '<p>No response.</p>';
-                    }
-                })
-                .catch(error => {
-                    console.error('Error fetching response:', error);
-                    overlay.innerHTML = '<p>Error fetching response.</p>';
-                });
-            }
-
+function callAI(question, overlay) {
+    fetch("/.netlify/functions/callAI", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ question })
+    })
+    .then(response => response.json())
+    .then(data => {
+        const content = data?.candidates?.[0]?.content?.parts?.[0]?.text;
+        if (content) {
+            overlay.innerHTML = window.md.render(content);
         } else {
-            console.log('Waiting for .calculator-display, .rad.active, or clear button...');
+            overlay.innerHTML = 'No response.';
         }
-    }, 500);
+        scrollToBottomOnce();
+    })
+    .catch(error => {
+        console.error('Error fetching AI response:', error);
+        overlay.innerHTML = 'Error fetching response.';
+        scrollToBottomOnce();
+    });
 }
+
+
+
 setupCalculatorOverlay();
