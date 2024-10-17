@@ -271,6 +271,7 @@ function setCursorPosition(element, position) {
         }
     }, 500);
 }
+var converter = new showdown.Converter(),
 function callAI(question, overlay) {
     fetch("/.netlify/functions/callAI", {
         method: "POST",
@@ -281,7 +282,7 @@ function callAI(question, overlay) {
     .then(data => {
         const content = data?.candidates?.[0]?.content?.parts?.[0]?.text;
         if (content) {
-            overlay.innerHTML = basicMarkdownToHTML(content);
+            overlay.innerHTML = converter.makeHtml(content);
         } else {
             overlay.innerHTML = 'No response.';
         }
