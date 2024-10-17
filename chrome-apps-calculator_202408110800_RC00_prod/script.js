@@ -1,20 +1,41 @@
 function basicMarkdownToHTML(text) {
-    return text
+    // Step 1: Escape HTML special characters first to prevent issues
+    text = text.replace(/</g, '&lt;').replace(/>/g, '&gt;');
+    
+    // Step 2: Handle block elements first
+    text = text
         .replace(/(?:\r\n|\r|\n)/g, '<br>')               // Newlines to <br>
         .replace(/^### (.+?)(<br>|$)/gm, '<h3>$1</h3>')   // H3 headers
         .replace(/^## (.+?)(<br>|$)/gm, '<h2>$1</h2>')    // H2 headers
         .replace(/^# (.+?)(<br>|$)/gm, '<h1>$1</h1>')     // H1 headers
-        .replace(/__([\s\S]+?)__/g, '<strong>$1</strong>') // Bold
-        .replace(/\*\*([\s\S]+?)\*\*/g, '<strong>$1</strong>') // Bold
-        .replace(/_([\s\S]+?)_/g, '<em>$1</em>')          // Italic
-        .replace(/\*([\s\S]+?)\*/g, '<em>$1</em>')        // Italic
-        .replace(/\`([\s\S]+?)\`/g, '<code>$1</code>')    // Inline code
         .replace(/^\> (.+?)(<br>|$)/gm, '<blockquote>$1</blockquote>') // Blockquotes
-        .replace(/(\*\*\*|---)(<br>|$)/g, '<hr>')         // Horizontal rules
-        .replace(/^\* (.+?)(<br>|$)/gm, '<ul><li>$1</li></ul>')       // Unordered lists
-        .replace(/^\d+\. (.+?)(<br>|$)/gm, '<ol><li>$1</li></ol>')    // Ordered lists
-        .replace(/\[([^\]]+)\]\(([^)]+)\)/g, '<a href="$2" target="_blank">$1</a>'); // Links
+        .replace(/(\*\*\*|---)(<br>|$)/g, '<hr>');        // Horizontal rules
+
+    // Step 3: Handle lists (unordered and ordered)
+    text = text
+        .replace(/(<br>|^)\* (.+?)(<br>|$)/gm, '$1<ul><li>$2</li></ul>$3') // Unordered list
+        .replace(/(<br>|^)\d+\. (.+?)(<br>|$)/gm, '$1<ol><li>$2</li></ol>$3') // Ordered list
+        .replace(/<\/(ul|ol)>(<br>|<li>)/g, '</$1>'); // Fix consecutive lists
+
+    // Step 4: Process inline elements
+    text = text
+        .replace(/__(.+?)__/g, '<strong>$1</strong>') // Bold - underscores
+        .replace(/\*\*(.+?)\*\*/g, '<strong>$1</strong>') // Bold - asterisks
+        .replace(/_([^_]+)_/g, '<em>$1</em>')         // Italic - underscores
+        .replace(/\*([^*]+)\*/g, '<em>$1</em>')       // Italic - asterisks
+        .replace(/\`([^`]+)\`/g, '<code>$1</code>');  // Inline code
+
+    // Step 5: Convert markdown links to HTML links
+    text = text.replace(/\[([^\]]+)\]\(([^)]+)\)/g, '<a href="$2" target="_blank">$1</a>');
+    
+    // Step 6: Clean up nested lists
+    text = text.replace(/<\/ul>\s*<ul>/g, '')  // Merge <ul> tags
+               .replace(/<\/ol>\s*<ol>/g, '')  // Merge <ol> tags
+               .replace(/<\/li><li>/g, '</li><li>'); // Maintain <li> structure
+
+    return text;
 }
+
 
 
 function scrollToBottomOnce() {
