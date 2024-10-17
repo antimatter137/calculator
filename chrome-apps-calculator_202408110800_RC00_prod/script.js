@@ -1,3 +1,58 @@
+function injectDarkModeStyles() {
+    const darkModeStyles = `
+        body.dark-mode {
+            background-color: #1e1e1e;
+            color: white;
+            transition: background-color 0.3s ease, color 0.3s ease;
+        }
+        .dark-mode button, .dark-mode input, .dark-mode select {
+            background-color: #333;
+            color: white;
+            border-color: #555;
+        }
+        .dark-mode a {
+            color: #1e90ff;
+        }
+        .dark-mode a:hover {
+            color: #00bfff;
+        }
+    `;
+
+    const styleElement = document.createElement("style");
+    styleElement.innerText = darkModeStyles;
+    document.head.appendChild(styleElement);
+}
+
+function toggleDarkMode() {
+    document.body.classList.toggle('dark-mode');
+    
+    if (document.body.classList.contains('dark-mode')) {
+        localStorage.setItem('theme', 'dark');
+    } else {
+        localStorage.setItem('theme', 'light');
+    }
+}
+
+function applySavedTheme() {
+    const savedTheme = localStorage.getItem('theme');
+    if (savedTheme === 'dark') {
+        document.body.classList.add('dark-mode');
+    }
+}
+
+injectDarkModeStyles();
+
+applySavedTheme();
+
+const darkModeButton = document.createElement('button');
+darkModeButton.innerText = 'Toggle Dark Mode';
+darkModeButton.style.position = 'fixed';
+darkModeButton.style.bottom = '10px';
+darkModeButton.style.right = '10px';
+darkModeButton.style.zIndex = '1000';
+darkModeButton.onclick = toggleDarkMode;
+document.body.appendChild(darkModeButton);
+
 function basicMarkdownToHTML(text) {
     return text
         .replace(/(?:\r\n|\r|\n)/g, '<br>')
@@ -25,10 +80,6 @@ function basicMarkdownToHTML(text) {
             return `<table><tr>${cells}</tr></table>`;
         });
 }
-
-
-
-
 function scrollToBottomOnce() {
     const calcField1 = document.querySelector('.calc-display');
         if (calcField1) {
