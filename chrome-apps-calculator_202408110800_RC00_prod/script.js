@@ -297,8 +297,8 @@ function callAI(question, overlay) {
         localStorage.setItem("lastAICallDate", dateKey);
     }
 
-    if (callCount >= 30) {
-        overlay.innerHTML = 'You have reached your daily limit of 10 requests.';
+    if (callCount >= 20) {
+        overlay.innerHTML = 'You have reached your daily limit of 20 requests.';
         scrollToBottomOnce();
         return;
     }
@@ -312,9 +312,12 @@ function callAI(question, overlay) {
     .then(data => {
         const content = data?.candidates?.[0]?.content?.parts?.[0]?.text;
         if (content) {
-            const mathContent = content.replace(/\$/g, '\\$');
-            overlay.innerHTML = basicMarkdownToHTML(mathContent);
-            
+            // Use a regular expression to wrap LaTeX in $...$ for MathJax
+            overlay.innerHTML = content.replace(/\$\$([^\$]+)\$\$/g, function(match, math) {
+                return `<span class="mathjax-latex">$$${math}$$</span>`;
+            });
+
+            // Render LaTeX with MathJax after content is set
             if (window.MathJax) {
                 MathJax.typesetPromise([overlay]).catch((err) => console.error(err.message));
             }
@@ -330,6 +333,7 @@ function callAI(question, overlay) {
         scrollToBottomOnce();
     });
 }
+
 
 
 setupCalculatorOverlay();
