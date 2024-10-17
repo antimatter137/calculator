@@ -297,8 +297,8 @@ function callAI(question, overlay) {
         localStorage.setItem("lastAICallDate", dateKey);
     }
 
-    if (callCount >= 20) {
-        overlay.innerHTML = 'You have reached your daily limit of 20 requests.';
+    if (callCount >= 30) {
+        overlay.innerHTML = 'You have reached your daily limit of 30 requests.';
         scrollToBottomOnce();
         return;
     }
@@ -310,14 +310,15 @@ function callAI(question, overlay) {
     })
     .then(response => response.json())
     .then(data => {
-        const content = data?.candidates?.[0]?.content?.parts?.[0]?.text;
+        let content = data?.candidates?.[0]?.content?.parts?.[0]?.text;
         if (content) {
-            // Use a regular expression to wrap LaTeX in $...$ for MathJax
-            overlay.innerHTML = content.replace(/\$\$([^\$]+)\$\$/g, function(match, math) {
-                return `<span class="mathjax-latex">$$${math}$$</span>`;
-            });
+            // Ensure LaTeX fractions and other math are wrapped in dollar signs
+            content = content.replace(/\\\((.*?)\\\)/g, '$$$1$$'); // Inline math \( ... \)
+            content = content.replace(/\\\[(.*?)\\\]/g, '$$$$ $1 $$$$'); // Display math \[ ... \]
 
-            // Render LaTeX with MathJax after content is set
+            overlay.innerHTML = content;
+
+            // Trigger MathJax rendering
             if (window.MathJax) {
                 MathJax.typesetPromise([overlay]).catch((err) => console.error(err.message));
             }
