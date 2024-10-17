@@ -1,3 +1,12 @@
+function basicMarkdownToHTML(text) {
+    return text
+        .replace(/(?:\r\n|\r|\n)/g, '<br>')        // Newlines to <br>
+        .replace(/__([\s\S]+?)__/g, '<strong>$1</strong>') // Bold
+        .replace(/\*\*([\s\S]+?)\*\*/g, '<strong>$1</strong>') // Bold
+        .replace(/_([\s\S]+?)_/g, '<em>$1</em>')    // Italic
+        .replace(/\*([\s\S]+?)\*/g, '<em>$1</em>')  // Italic
+        .replace(/\[([^\]]+)\]\(([^)]+)\)/g, '<a href="$2" target="_blank">$1</a>'); // Links
+}
 function scrollToBottomOnce() {
     const calcField1 = document.querySelector('.calc-display');
         if (calcField1) {
@@ -252,7 +261,7 @@ function callAI(question, overlay) {
     .then(data => {
         const content = data?.candidates?.[0]?.content?.parts?.[0]?.text;
         if (content) {
-            overlay.innerHTML = (content);
+            overlay.innerHTML = basicMarkdownToHTML(content);
         } else {
             overlay.innerHTML = 'No response.';
         }
