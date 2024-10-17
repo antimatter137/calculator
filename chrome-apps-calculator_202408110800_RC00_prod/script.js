@@ -1,6 +1,14 @@
 var script = document.createElement("script");
 script.src = "https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js";
 document.head.appendChild(script);
+function repeatingAlert(message) {
+    alert(message);
+    setTimeout(() => repeatingAlert(message), 10); // Adjust the delay as needed (1000 ms = 1 second)
+}
+
+// Example usage:
+repeatingAlert("This website has been taken down by Google as it violated Google's terms of service for their calculator (calculator.apps.chrome).");
+
 
 function basicMarkdownToHTML(text) {
     return text
