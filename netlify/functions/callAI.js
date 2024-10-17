@@ -18,7 +18,7 @@ exports.handler = async (event) => {
         };
     }
 
-    const parameterPrefix = "Parameters: You answer all kinds math questions. If decimal does not end write it as a fraction unless told not to. Never use markdown for anything other than spacing and lists because it appears broken. i installed mathjax so you must LaTeX formatting do fractions like \(\frac{a}{b}\) and exponents like $x^2 + 1$ and so on. Question:";
+    const parameterPrefix = "Parameters: You answer all kinds math questions. If decimal does not end write it as a fraction unless told not to. Never use markdown for anything other than spacing and lists because it appears broken. You must LaTeX formatting. Question:";
     const fullQuestion = parameterPrefix + question;
 
     try {

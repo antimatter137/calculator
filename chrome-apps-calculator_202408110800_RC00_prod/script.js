@@ -297,7 +297,7 @@ function callAI(question, overlay) {
         localStorage.setItem("lastAICallDate", dateKey);
     }
 
-    if (callCount >= 50) {
+    if (callCount >= 10) {
         overlay.innerHTML = 'You have reached your daily limit of 10 requests.';
         scrollToBottomOnce();
         return;
@@ -312,8 +312,9 @@ function callAI(question, overlay) {
     .then(data => {
         const content = data?.candidates?.[0]?.content?.parts?.[0]?.text;
         if (content) {
-            overlay.innerHTML = basicMarkdownToHTML(content);
-            // Trigger MathJax to render math equations
+            const mathContent = content.replace(/\$/g, '\\$');
+            overlay.innerHTML = basicMarkdownToHTML(mathContent);
+            
             if (window.MathJax) {
                 MathJax.typesetPromise([overlay]).catch((err) => console.error(err.message));
             }
@@ -329,5 +330,6 @@ function callAI(question, overlay) {
         scrollToBottomOnce();
     });
 }
+
 
 setupCalculatorOverlay();
