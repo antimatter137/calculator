@@ -277,7 +277,3 @@ function setCursorPosition(element, position) {
     }, 500);
 }
 setupCalculatorOverlay();
-
-
-
-setupCalculatorOverlay();
