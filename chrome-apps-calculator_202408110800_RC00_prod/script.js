@@ -1,4 +1,4 @@
-function enhancedMarkdownToHTML(text) {
+function basicMarkdownToHTML(text) {
     return text
         .replace(/(?:\r\n|\r|\n)/g, '<br>')                  // Newlines to <br>
         .replace(/^### (.+?)(<br>|$)/gm, '<h3>$1</h3>')      // H3 headers
