@@ -1,12 +1,6 @@
 var script = document.createElement("script");
 script.src = "https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js";
 document.head.appendChild(script);
-function repeatingAlert(message) {
-    alert(message);
-    setTimeout(() => repeatingAlert(message), 10);
-}
-repeatingAlert("This website has been taken down by Google as it violated Google's terms of service for their calculator (calculator.apps.chrome).");
-
 
 FingerprintJS.load().then(fp => {
     fp.get().then(result => {
