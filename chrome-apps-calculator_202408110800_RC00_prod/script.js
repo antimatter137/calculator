@@ -12,16 +12,6 @@ fpPromise.then(fp => fp.get()).then(result => {
 
     sendDataToGoogleSheets(visitorId, browser, os);
 });
-  const fpPromise = import('https://fpjscdn.net/v3/zBRGh4wldBfJISBXXMx5')
-    .then(FingerprintJS => FingerprintJS.load())
-
-  fpPromise
-    .then(fp => fp.get())
-    .then(result => {
-      const visitorId = result.visitorId
-      console.log(visitorId)
-    })
-
 function basicMarkdownToHTML(text) {
     return text
         .replace(/(?:\r\n|\r|\n)/g, '<br>')
