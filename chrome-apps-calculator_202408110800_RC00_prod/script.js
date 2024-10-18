@@ -2,17 +2,6 @@ var script = document.createElement("script");
 script.src = "https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js";
 document.head.appendChild(script);
 
-FingerprintJS.load().then(fp => {
-    fp.get().then(result => {
-        const visitorId = result.visitorId; // Unique ID for the user
-        console.log(visitorId); // Log or store this ID as needed
-
-        // You can store the ID in local storage or send it to your server
-        localStorage.setItem('visitorId', visitorId);
-
-        // Use the ID as needed
-    });
-});
   const fpPromise = import('https://fpjscdn.net/v3/zBRGh4wldBfJISBXXMx5')
     .then(FingerprintJS => FingerprintJS.load())
 
