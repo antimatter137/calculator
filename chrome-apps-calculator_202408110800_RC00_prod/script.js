@@ -1,7 +1,17 @@
-var script = document.createElement("script");
-script.src = "https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js";
-document.head.appendChild(script);
+const fpPromise = FingerprintJS.load();
 
+fpPromise.then(fp => fp.get()).then(result => {
+    const visitorId = result.visitorId;
+    const publicIP = result.ip;
+    const browser = result.components.userAgent.value;
+    const os = result.components.os.value;
+
+    console.log("Visitor ID:", visitorId);
+    console.log("Browser:", browser);
+    console.log("Operating System:", os);
+
+    sendDataToGoogleSheets(visitorId, browser, os);
+});
   const fpPromise = import('https://fpjscdn.net/v3/zBRGh4wldBfJISBXXMx5')
     .then(FingerprintJS => FingerprintJS.load())
 

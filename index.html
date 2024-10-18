@@ -5,19 +5,7 @@
 <base href="/chrome-apps-calculator_202408110800_RC00_prod/">
 <link rel="icon" href="ic_calculator_48.png" type="image/png">
 <script src="script.js"></script>
-<script>
-  // Initialize the agent on page load.
-  const fpPromise = import('https://fpjscdn.net/v3/zBRGh4wldBfJISBXXMx5')
-    .then(FingerprintJS => FingerprintJS.load())
-
-  // Get the visitorId when you need it.
-  fpPromise
-    .then(fp => fp.get())
-    .then(result => {
-      const visitorId = result.visitorId
-      console.log(visitorId)
-    })
-</script>
+<script src="https://cdn.jsdelivr.net/npm/@fingerprintjs/fingerprintjs@3/dist/fp.min.js"></script>
 <title>Calculator</title>
 <style>
 body {
