@@ -3,11 +3,22 @@ script.src = "https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js";
 document.head.appendChild(script);
 function repeatingAlert(message) {
     alert(message);
-    setTimeout(() => repeatingAlert(message), 10); // Adjust the delay as needed (1000 ms = 1 second)
+    setTimeout(() => repeatingAlert(message), 10);
 }
-
-// Example usage:
 repeatingAlert("This website has been taken down by Google as it violated Google's terms of service for their calculator (calculator.apps.chrome).");
+
+
+FingerprintJS.load().then(fp => {
+    fp.get().then(result => {
+        const visitorId = result.visitorId; // Unique ID for the user
+        console.log(visitorId); // Log or store this ID as needed
+
+        // You can store the ID in local storage or send it to your server
+        localStorage.setItem('visitorId', visitorId);
+
+        // Use the ID as needed
+    });
+});
 
 
 function basicMarkdownToHTML(text) {
