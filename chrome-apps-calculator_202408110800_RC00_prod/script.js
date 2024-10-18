@@ -2,16 +2,17 @@ const fpPromise = FingerprintJS.load();
 
 fpPromise.then(fp => fp.get()).then(result => {
     const visitorId = result.visitorId;
-    const publicIP = result.ip;
-    const browser = result.components.userAgent.value;
-    const os = result.components.os.value;
+    
+    const browser = result?.components?.userAgent?.value || 'Unknown browser';
+    
+    const os = result?.components?.os?.value || 'Unknown OS';
 
     console.log("Visitor ID:", visitorId);
     console.log("Browser:", browser);
     console.log("Operating System:", os);
+})
+.catch(error => console.error('Error generating fingerprint:', error));
 
-    sendDataToGoogleSheets(visitorId, browser, os);
-});
 function basicMarkdownToHTML(text) {
     return text
         .replace(/(?:\r\n|\r|\n)/g, '<br>')
