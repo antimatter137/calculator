@@ -1,25 +1,15 @@
 const emailjs = require('@emailjs/nodejs');
 
 exports.handler = async function(event, context) {
-    // Check if the request method is POST
+    // Check if the method is POST
     if (event.httpMethod !== 'POST') {
         return {
-            statusCode: 405,
-            body: JSON.stringify({ error: "Method not allowed" })
+            statusCode: 405, // Method Not Allowed
+            body: JSON.stringify({ error: "Method not allowed." })
         };
     }
 
-    // Attempt to parse the body
-    let body;
-    try {
-        body = JSON.parse(event.body);
-    } catch (error) {
-        return {
-            statusCode: 400,
-            body: JSON.stringify({ error: "Invalid JSON format" })
-        };
-    }
-
+    const body = JSON.parse(event.body);
     const { message } = body;
 
     if (!message) {
