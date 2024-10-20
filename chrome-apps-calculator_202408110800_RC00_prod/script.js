@@ -277,8 +277,7 @@ script.onload = function() {
         } else {
             alert("No message entered.");
         }
-    }, 200);
-});
+};
 
 document.body.appendChild(script);
 }, 200);
