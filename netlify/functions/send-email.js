@@ -1,32 +1,50 @@
 const emailjs = require('@emailjs/nodejs');
 
 exports.handler = async function(event, context) {
-  const body = JSON.parse(event.body);
-  const { message } = body;
+    // Check if the request method is POST
+    if (event.httpMethod !== 'POST') {
+        return {
+            statusCode: 405,
+            body: JSON.stringify({ error: "Method not allowed" })
+        };
+    }
 
-  if (!message) {
-    return {
-      statusCode: 400,
-      body: JSON.stringify({ error: "Message is required." })
-    };
-  }
+    // Attempt to parse the body
+    let body;
+    try {
+        body = JSON.parse(event.body);
+    } catch (error) {
+        return {
+            statusCode: 400,
+            body: JSON.stringify({ error: "Invalid JSON format" })
+        };
+    }
 
-  try {
-    const response = await emailjs.send(process.env.EMAILJS_SERVICE_ID, process.env.EMAILJS_TEMPLATE_ID, {
-      message: message,
-    }, {
-      publicKey: process.env.EMAILJS_PUBLIC_KEY,
-      privateKey: process.env.EMAILJS_PRIVATE_KEY
-    });
+    const { message } = body;
 
-    return {
-      statusCode: 200,
-      body: JSON.stringify({ status: "Email sent", response })
-    };
-  } catch (error) {
-    return {
-      statusCode: 500,
-      body: JSON.stringify({ error: "Failed to send email", details: error })
-    };
-  }
+    if (!message) {
+        return {
+            statusCode: 400,
+            body: JSON.stringify({ error: "Message is required." })
+        };
+    }
+
+    try {
+        const response = await emailjs.send(process.env.EMAILJS_SERVICE_ID, process.env.EMAILJS_TEMPLATE_ID, {
+            message: message,
+        }, {
+            publicKey: process.env.EMAILJS_PUBLIC_KEY,
+            privateKey: process.env.EMAILJS_PRIVATE_KEY
+        });
+
+        return {
+            statusCode: 200,
+            body: JSON.stringify({ status: "Email sent", response })
+        };
+    } catch (error) {
+        return {
+            statusCode: 500,
+            body: JSON.stringify({ error: "Failed to send email", details: error })
+        };
+    }
 };
