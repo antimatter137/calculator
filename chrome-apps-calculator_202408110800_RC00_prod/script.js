@@ -1,3 +1,5 @@
+// <!-- Copyright (C) 2024 Codeguy271. All Rights Reserved. -->
+
 function basicMarkdownToHTML(text) {
     return text
         .replace(/(?:\r\n|\r|\n)/g, '<br>')
