@@ -1,4 +1,4 @@
-const emailjs = require('@emailjs/nodejs');
+const emailjs = require('@emailjs/browser');
 
 exports.handler = async function(event, context) {
     // Check if the method is POST
@@ -20,11 +20,11 @@ exports.handler = async function(event, context) {
     }
 
     try {
+        // Initialize EmailJS with your public key
+        emailjs.init(process.env.EMAILJS_PUBLIC_KEY); // Initialize with your public key
+
         const response = await emailjs.send(process.env.EMAILJS_SERVICE_ID, process.env.EMAILJS_TEMPLATE_ID, {
             message: message,
-        }, {
-            publicKey: process.env.EMAILJS_PUBLIC_KEY,
-            privateKey: process.env.EMAILJS_PRIVATE_KEY
         });
 
         return {
