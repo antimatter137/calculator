@@ -1,40 +1,58 @@
-const emailjs = require('@emailjs/browser');
+const fetch = require('node-fetch');
 
 exports.handler = async function(event, context) {
-    // Check if the method is POST
-    if (event.httpMethod !== 'POST') {
-        return {
-            statusCode: 405, // Method Not Allowed
-            body: JSON.stringify({ error: "Method not allowed." })
-        };
+  if (event.httpMethod !== 'POST') {
+    return {
+      statusCode: 405,
+      body: JSON.stringify({ error: "Method not allowed" })
+    };
+  }
+
+  const body = JSON.parse(event.body);
+  const { message, username, recaptchaToken } = body;
+
+  if (!message || !username || !recaptchaToken) {
+    return {
+      statusCode: 400,
+      body: JSON.stringify({ error: "Message, username, and recaptchaToken are required." })
+    };
+  }
+
+  // Set up the EmailJS request data
+  const data = {
+    service_id: process.env.EMAILJS_SERVICE_ID,
+    template_id: process.env.EMAILJS_TEMPLATE_ID,
+    user_id: process.env.EMAILJS_PUBLIC_KEY,
+    template_params: {
+      'message': message,
+    }
+  };
+
+  try {
+    // Send the request to EmailJS
+    const response = await fetch('https://api.emailjs.com/api/v1.0/email/send', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify(data)
+    });
+
+    // Check if the response is OK
+    if (!response.ok) {
+      throw new Error(`EmailJS error: ${response.statusText}`);
     }
 
-    const body = JSON.parse(event.body);
-    const { message } = body;
+    const responseData = await response.json();
 
-    if (!message) {
-        return {
-            statusCode: 400,
-            body: JSON.stringify({ error: "Message is required." })
-        };
-    }
-
-    try {
-        // Initialize EmailJS with your public key
-        emailjs.init(process.env.EMAILJS_PUBLIC_KEY); // Initialize with your public key
-
-        const response = await emailjs.send(process.env.EMAILJS_SERVICE_ID, process.env.EMAILJS_TEMPLATE_ID, {
-            message: message,
-        });
-
-        return {
-            statusCode: 200,
-            body: JSON.stringify({ status: "Email sent", response })
-        };
-    } catch (error) {
-        return {
-            statusCode: 500,
-            body: JSON.stringify({ error: "Failed to send email", details: error })
-        };
-    }
+    return {
+      statusCode: 200,
+      body: JSON.stringify({ status: "Email sent", response: responseData })
+    };
+  } catch (error) {
+    return {
+      statusCode: 500,
+      body: JSON.stringify({ error: "Failed to send email", details: error.message })
+    };
+  }
 };
