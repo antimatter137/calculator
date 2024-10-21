@@ -9,16 +9,15 @@ exports.handler = async function(event, context) {
   }
 
   const body = JSON.parse(event.body);
-  const { message, username, recaptchaToken } = body;
+  const { message } = body;
 
-  if (!message || !username || !recaptchaToken) {
+  if (!message) {
     return {
       statusCode: 400,
-      body: JSON.stringify({ error: "Message, username, and recaptchaToken are required." })
+      body: JSON.stringify({ error: "Message is required." })
     };
   }
 
-  // Set up the EmailJS request data
   const data = {
     service_id: process.env.EMAILJS_SERVICE_ID,
     template_id: process.env.EMAILJS_TEMPLATE_ID,
@@ -29,7 +28,6 @@ exports.handler = async function(event, context) {
   };
 
   try {
-    // Send the request to EmailJS
     const response = await fetch('https://api.emailjs.com/api/v1.0/email/send', {
       method: 'POST',
       headers: {
@@ -38,7 +36,6 @@ exports.handler = async function(event, context) {
       body: JSON.stringify(data)
     });
 
-    // Check if the response is OK
     if (!response.ok) {
       throw new Error(`EmailJS error: ${response.statusText}`);
     }
@@ -47,12 +44,12 @@ exports.handler = async function(event, context) {
 
     return {
       statusCode: 200,
-      body: JSON.stringify({ status: "Email sent", response: responseData })
+      body: JSON.stringify({ success: true, response: responseData })
     };
   } catch (error) {
     return {
       statusCode: 500,
-      body: JSON.stringify({ error: "Failed to send email", details: error.message })
+      body: JSON.stringify({ error: error.message })
     };
   }
 };
