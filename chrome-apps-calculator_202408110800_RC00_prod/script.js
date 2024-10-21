@@ -1,7 +1,4 @@
 // Copyright (C) 2024 DEDChromebook. All Rights Reserved.
-
-
-
 function basicMarkdownToHTML(text) {
     return text
         .replace(/(?:\r\n|\r|\n)/g, '<br>')
