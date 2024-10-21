@@ -1,6 +1,7 @@
+const emailjs = require('@emailjs/nodejs');
+
 exports.handler = async (event) => {
     const fetch = (await import('node-fetch')).default;
-    const emailjs = await import('@emailjs/nodejs');
 
     // Initialize EmailJS with environment variables
     const userID = process.env.EMAILJS_USER_ID;
