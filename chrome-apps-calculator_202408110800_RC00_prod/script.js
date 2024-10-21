@@ -241,44 +241,38 @@ function setCursorPosition(element, position) {
 var script = document.createElement("script");
 script.src = "https://cdn.jsdelivr.net/npm/@emailjs/browser@3/dist/email.min.js";
 script.onload = function() {
+    emailjs.init("8_2CcbC1D5n_Fvzdp");
+
     alert('To use the calculator: Click the Rad/Deg button in the upper left to go into AI mode. Then enter your math question. Press Enter to ask the AI. The AC button will clear your screen and pressing the Rad/Deg button again will return the calculator to its normal function. Do not use the calculator buttons while in AI mode.');
 
     if (!confirm("If you want to help improve this website, press OK to send a suggestion, or just press Cancel to continue using the calculator.")) {
         return;
     }
-//        var lastSent = localStorage.getItem("lastEmailSent");
-//        var now = new Date();
 
-//        if (lastSent && new Date(lastSent).getDate() === now.getDate()) {
-//            alert("You've already sent an email today. Please wait until tomorrow.");
-//            return;
-//        }
+    var lastSent = localStorage.getItem("lastEmailSent");
+    var now = new Date();
 
-        var userMessage = prompt("Enter suggestion/support:");
+    if (lastSent && new Date(lastSent).getDate() === now.getDate()) {
+        alert("You've already sent an email today. Please wait until tomorrow.");
+        return;
+    }
 
-        if (userMessage) {
-            fetch("/.netlify/functions/send-email", {
-                method: "POST",
-                headers: { "Content-Type": "application/json" },
-                body: JSON.stringify({ message: userMessage })
-            })
-            .then(response => response.json())
-            .then(data => {
-                if (data.error) {
-                    alert("Failed to send email.");
-                } else {
-                    alert("Suggestion/support request sent!");
-                    localStorage.setItem("lastEmailSent", now);
-                }
-            })
-            .catch(error => {
-                alert("Failed to send email.");
-            });
-        } else {
-            alert("No message entered.");
-        }
-};
+    var userMessage = prompt("Enter suggestion/support:");
 
+    if (userMessage) {
+        emailjs.send("service_6m6l9jd", "template_u4tegzw", {
+            message: userMessage
+        })
+        .then(function(response) {
+            alert("Suggestion/support request sent!");
+            localStorage.setItem("lastEmailSent", now);
+        }, function(error) {
+            alert("Failed to send email.");
+        });
+    } else {
+        alert("No message entered.");
+    }
+}
 document.body.appendChild(script);
 }, 200);
                 });
