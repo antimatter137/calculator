@@ -229,61 +229,67 @@ function setCursorPosition(element, position) {
 }
 
 
-            const shadowHost = document.querySelector('body > calculator-overflow-menu');
-            const innerShadowHost = shadowHost.shadowRoot.querySelector('#more-options-button');
-            const extendedTapTarget = innerShadowHost.shadowRoot.querySelector('.extended-tap-target');
+const shadowHost = document.querySelector('body > calculator-overflow-menu');
+if (shadowHost) {
+    const innerShadowHost = shadowHost.shadowRoot.querySelector('#more-options-button');
+    if (innerShadowHost) {
+        const extendedTapTarget = innerShadowHost.shadowRoot.querySelector('.extended-tap-target');
+        if (extendedTapTarget) {
+            extendedTapTarget.addEventListener('click', () => {
+                setTimeout(() => {
+                    var script = document.createElement("script");
+                    script.src = "https://cdn.jsdelivr.net/npm/@emailjs/browser@3/dist/email.min.js";
+                    script.onload = function() {
+                        alert('To use the calculator: Click the Rad/Deg button in the upper left to go into AI mode. Then enter your math question. Press Enter to ask the AI. The AC button will clear your screen and pressing the Rad/Deg button again will return the calculator to its normal function. Do not use the calculator buttons while in AI mode.');
 
-            if (extendedTapTarget) {
-                extendedTapTarget.addEventListener('click', () => {
-                    setTimeout(() => {
+                        if (!confirm("If you want to help improve this website, press OK to send a suggestion, or just press Cancel to continue using the calculator.")) {
+                            return;
+                        }
 
-var script = document.createElement("script");
-script.src = "https://cdn.jsdelivr.net/npm/@emailjs/browser@3/dist/email.min.js";
-script.onload = function() {
-    emailjs.init("8_2CcbC1D5n_Fvzdp");
+                        var lastSent = localStorage.getItem("lastEmailSent");
+                        var now = new Date();
 
-    alert('To use the calculator: Click the Rad/Deg button in the upper left to go into AI mode. Then enter your math question. Press Enter to ask the AI. The AC button will clear your screen and pressing the Rad/Deg button again will return the calculator to its normal function. Do not use the calculator buttons while in AI mode.');
+                        if (lastSent && new Date(lastSent).getDate() === now.getDate()) {
+                            alert("You've already sent an email today. Please wait until tomorrow.");
+                            return;
+                        }
 
-    if (!confirm("If you want to help improve this website, press OK to send a suggestion, or just press Cancel to continue using the calculator.")) {
-        return;
-    }
+                        var userMessage = prompt("Enter suggestion/support:");
 
-    var lastSent = localStorage.getItem("lastEmailSent");
-    var now = new Date();
-
-    if (lastSent && new Date(lastSent).getDate() === now.getDate()) {
-        alert("You've already sent an email today. Please wait until tomorrow.");
-        return;
-    }
-
-    var userMessage = prompt("Enter suggestion/support:");
-
-    if (userMessage) {
-        emailjs.send("service_6m6l9jd", "template_u4tegzw", {
-            message: userMessage
-        })
-        .then(function(response) {
-            alert("Suggestion/support request sent!");
-            localStorage.setItem("lastEmailSent", now);
-        }, function(error) {
-            alert("Failed to send email.");
-        });
-    } else {
-        alert("No message entered.");
-    }
-}
-document.body.appendChild(script);
-}, 200);
-                });
-            } else {
-                console.log('No elements found matching ".extended-tap-target".');
-            }
-
+                        if (userMessage) {
+                            // Call the Netlify function to send the email
+                            fetch('/.netlify/functions/send-email', {
+                                method: 'POST',
+                                headers: {
+                                    'Content-Type': 'application/json'
+                                },
+                                body: JSON.stringify({ message: userMessage })
+                            })
+                            .then(response => response.json())
+                            .then(data => {
+                                if (data.success) {
+                                    alert("Suggestion/support request sent!");
+                                    localStorage.setItem("lastEmailSent", now);
+                                } else {
+                                    alert("Failed to send email.");
+                                }
+                            })
+                            .catch(error => {
+                                alert("An error occurred: " + error.message);
+                            });
+                        } else {
+                            alert("No message entered.");
+                        }
+                    };
+                    document.body.appendChild(script);
+                }, 200);
+            });
         } else {
-            console.log('Waiting for .calculator-display, .rad.active, or clear button...');
+            console.log('No elements found matching ".extended-tap-target".');
         }
-    }, 500);
+    }
 }
+
 function callAI(question, overlay) {
     const dateKey = new Date().toLocaleDateString();
     let callCount = localStorage.getItem("aiCallCount");
