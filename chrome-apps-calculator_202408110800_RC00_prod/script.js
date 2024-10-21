@@ -1,4 +1,6 @@
-// <!-- Copyright (C) 2024 Codeguy271. All Rights Reserved. -->
+// Copyright (C) 2024 DEDChromebook. All Rights Reserved.
+
+
 
 function basicMarkdownToHTML(text) {
     return text
