@@ -1,4 +1,37 @@
 // Copyright (C) 2024 DEDChromebook. All Rights Reserved.
+        const supabaseUrl = 'https://ibkyruibxpagxwawgybn.supabase.co';
+        const supabaseKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Imlia3lydWlieHBhZ3h3YXdneWJuIiwicm9sZSI6ImFub24iLCJpYXQiOjE3Mjk1NTI0ODQsImV4cCI6MjA0NTEyODQ4NH0.36m2XV0PFf7AeBzaqO_943PUMgwLMN0g8e67lnssVPE'
+
+        const { createClient } = supabase
+        const supabaseClient = createClient(supabaseUrl, supabaseKey);
+        console.log('Supabase URL:', supabaseUrl);
+console.log('Supabase Key:', supabaseKey)
+
+
+        async function insertVisitorData(visitorId, browser, os) {
+            const { data, error } = await supabaseClient
+                .from('calculator')
+                .insert([{ visitor_id: visitorId, browser: browser, os: os }]);
+
+            if (error) {
+                console.error('Error inserting visitor data:', error);
+            } else {
+                console.log('Visitor data inserted:', data);
+            }
+        }
+
+        const fpPromise = FingerprintJS.load();
+fpPromise.then(fp => fp.get()).then(result => {
+    console.log(result.components);
+
+    const visitorId = result.visitorId;
+    const browser = result?.components?.userAgent?.value || 'Unknown browser';
+    const os = result?.components?.os?.value || 'Unknown OS';
+
+    console.log("Visitor ID:", visitorId);
+    console.log("Browser:", browser);
+    console.log("Operating System:", os);
+});
 
 function basicMarkdownToHTML(text) {
     return text
