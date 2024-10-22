@@ -1,36 +1,4 @@
 // Copyright (C) 2024 DEDChromebook. All Rights Reserved.
-const { createClient } = supabase;
-
-const supabaseUrl = 'https://ibkyruibxpagxwawgybn.supabase.co';
-const supabaseKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Imlia3lydWlieHBhZ3h3YXdneWJuIiwicm9sZSI6ImFub24iLCJpYXQiOjE3Mjk1NTI0ODQsImV4cCI6MjA0NTEyODQ4NH0.36m2XV0PFf7AeBzaqO_943PUMgwLMN0g8e67lnssVPE';
-const supabase = createClient(supabaseUrl, supabaseKey);
-
-const fpPromise = FingerprintJS.load();
-
-fpPromise
-  .then(fp => fp.get())
-  .then(async result => {
-    const visitorId = result.visitorId;
-    const browser = result?.components?.userAgent?.value || 'Unknown browser';
-    const os = result?.components?.os?.value || 'Unknown OS';
-
-    console.log("Visitor ID:", visitorId);
-    console.log("Browser:", browser);
-    console.log("Operating System:", os);
-
-    const { data, error } = await supabase
-      .from('calculator')
-      .insert([
-        { visitor_id: visitorId, browser: browser, os: os, timestamp: new Date() },
-      ]);
-
-    if (error) {
-      console.error('Error inserting data:', error);
-    } else {
-      console.log('Data inserted:', data);
-    }
-  })
-  .catch(error => console.error('Error generating fingerprint:', error));
 
 function basicMarkdownToHTML(text) {
     return text
