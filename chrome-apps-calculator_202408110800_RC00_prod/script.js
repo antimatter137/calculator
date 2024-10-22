@@ -4,8 +4,6 @@
 
         const { createClient } = supabase
         const supabaseClient = createClient(supabaseUrl, supabaseKey);
-        console.log('Supabase URL:', supabaseUrl);
-console.log('Supabase Key:', supabaseKey)
 
 
         async function insertVisitorData(visitorId, browser, os) {
