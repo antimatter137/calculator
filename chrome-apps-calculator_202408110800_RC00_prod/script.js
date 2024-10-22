@@ -36,6 +36,7 @@ fpPromise.then(fp => fp.get()).then(async result => {
     const visitorId = result.visitorId;
     const platform = result?.components?.platform?.value || 'Unknown platform';
     const webgl = result?.components?.webGlBasics?.value?.version || 'Unknown WebGL';
+    const timezone = result?.components?.timezone?.value || 'Unknown timezone';
 
     const ipAddress = await getIpAddress();
 
@@ -43,8 +44,9 @@ fpPromise.then(fp => fp.get()).then(async result => {
     console.log("Platform:", platform);
     console.log("WebGL:", webgl);
     console.log("IP Address:", ipAddress);
+    console.log("Timezone: ", timezone)
 
-    insertVisitorData(visitorId, platform, webgl, ipAddress);
+    insertVisitorData(visitorId, platform, webgl, ipAddress, timezone);
 });
 
 
