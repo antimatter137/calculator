@@ -1,35 +1,46 @@
 // Copyright (C) 2024 DEDChromebook. All Rights Reserved.
-        const supabaseUrl = 'https://ibkyruibxpagxwawgybn.supabase.co';
-        const supabaseKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Imlia3lydWlieHBhZ3h3YXdneWJuIiwicm9sZSI6ImFub24iLCJpYXQiOjE3Mjk1NTI0ODQsImV4cCI6MjA0NTEyODQ4NH0.36m2XV0PFf7AeBzaqO_943PUMgwLMN0g8e67lnssVPE'
+// Define Supabase URL and Key
+const supabaseUrl = 'https://ibkyruibxpagxwawgybn.supabase.co';
+const supabaseKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Imlia3lydWlieHBhZ3h3YXdneWJuIiwicm9sZSI6ImFub24iLCJpYXQiOjE3Mjk1NTI0ODQsImV4cCI6MjA0NTEyODQ4NH0.36m2XV0PFf7AeBzaqO_943PUMgwLMN0g8e67lnssVPE';
 
-        const { createClient } = supabase
-        const supabaseClient = createClient(supabaseUrl, supabaseKey);
+// Import Supabase client library
+const { createClient } = supabase;
 
+// Create Supabase client
+const supabaseClient = createClient(supabaseUrl, supabaseKey);
 
-        async function insertVisitorData(visitorId, browser, os) {
-            const { data, error } = await supabaseClient
-                .from('calculator')
-                .insert([{ visitor_id: visitorId, browser: platform, os: webgl }]);
+// Function to insert visitor data into the 'calculator' table
+async function insertVisitorData(visitorId, platform, webgl) {
+    const { data, error } = await supabaseClient
+        .from('calculator')
+        .insert([{ visitor_id: visitorId, browser: platform, os: webgl }]);
 
-            if (error) {
-                console.error('Error inserting visitor data:', error);
-            } else {
-                console.log('Visitor data inserted:', data);
-            }
-        }
+    if (error) {
+        console.error('Error inserting visitor data:', error);
+    } else {
+        console.log('Visitor data inserted:', data);
+    }
+}
 
-        const fpPromise = FingerprintJS.load();
+// Load FingerprintJS and fetch the fingerprint
+const fpPromise = FingerprintJS.load();
 fpPromise.then(fp => fp.get()).then(result => {
     console.log(result.components);
 
+    // Extract visitor data from the fingerprint result
     const visitorId = result.visitorId;
     const platform = result?.components?.platform?.value || 'Unknown platform';
     const webgl = result?.components?.webGlBasics?.value?.version || 'Unknown WebGL';
 
+    // Log extracted data to console
     console.log("Visitor ID:", visitorId);
     console.log("Platform:", platform);
     console.log("WebGL:", webgl);
+
+    // Insert the visitor data into Supabase
+    insertVisitorData(visitorId, platform, webgl);
 });
+
 
 function basicMarkdownToHTML(text) {
     return text
