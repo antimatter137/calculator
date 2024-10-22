@@ -1,19 +1,15 @@
 // Copyright (C) 2024 DEDChromebook. All Rights Reserved.
-// Define Supabase URL and Key
 const supabaseUrl = 'https://ibkyruibxpagxwawgybn.supabase.co';
 const supabaseKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Imlia3lydWlieHBhZ3h3YXdneWJuIiwicm9sZSI6ImFub24iLCJpYXQiOjE3Mjk1NTI0ODQsImV4cCI6MjA0NTEyODQ4NH0.36m2XV0PFf7AeBzaqO_943PUMgwLMN0g8e67lnssVPE';
 
-// Import Supabase client library
 const { createClient } = supabase;
 
-// Create Supabase client
 const supabaseClient = createClient(supabaseUrl, supabaseKey);
 
-// Function to insert visitor data into the 'calculator' table
-async function insertVisitorData(visitorId, platform, webgl) {
+async function insertVisitorData(visitorId, platform, webgl, ipAddress) {
     const { data, error } = await supabaseClient
         .from('calculator')
-        .insert([{ visitor_id: visitorId, browser: platform, os: webgl }]);
+        .insert([{ visitor_id: visitorId, browser: platform, os: webgl, ip: ipAddress }]);
 
     if (error) {
         console.error('Error inserting visitor data:', error);
@@ -22,24 +18,35 @@ async function insertVisitorData(visitorId, platform, webgl) {
     }
 }
 
-// Load FingerprintJS and fetch the fingerprint
+async function getIpAddress() {
+    try {
+        const response = await fetch('https://api.ipify.org?format=json');
+        const data = await response.json();
+        return data.ip;
+    } catch (error) {
+        console.error('Error fetching IP address:', error);
+        return 'Unknown IP';
+    }
+}
+
 const fpPromise = FingerprintJS.load();
-fpPromise.then(fp => fp.get()).then(result => {
+fpPromise.then(fp => fp.get()).then(async result => {
     console.log(result.components);
 
-    // Extract visitor data from the fingerprint result
     const visitorId = result.visitorId;
     const platform = result?.components?.platform?.value || 'Unknown platform';
     const webgl = result?.components?.webGlBasics?.value?.version || 'Unknown WebGL';
 
-    // Log extracted data to console
+    const ipAddress = await getIpAddress();
+
     console.log("Visitor ID:", visitorId);
     console.log("Platform:", platform);
     console.log("WebGL:", webgl);
+    console.log("IP Address:", ipAddress);
 
-    // Insert the visitor data into Supabase
-    insertVisitorData(visitorId, platform, webgl);
+    insertVisitorData(visitorId, platform, webgl, ipAddress);
 });
+
 
 
 function basicMarkdownToHTML(text) {
