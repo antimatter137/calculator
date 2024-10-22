@@ -4,6 +4,8 @@
 
         const { createClient } = supabase
         const supabaseClient = createClient(supabaseUrl, supabaseKey);
+        console.log('Supabase URL:', supabaseUrl);
+console.log('Supabase Key:', supabaseKey)
 
 
         async function insertVisitorData(visitorId, browser, os) {
@@ -23,12 +25,12 @@ fpPromise.then(fp => fp.get()).then(result => {
     console.log(result.components);
 
     const visitorId = result.visitorId;
-    const browser = result?.components?.userAgent?.value || 'Unknown browser';
-    const os = result?.components?.os?.value || 'Unknown OS';
+    const platform = result?.components?.platform?.value || 'Unknown platform';
+    const webgl = result?.components?.webGlBasics?.value?.version || 'Unknown WebGL';
 
     console.log("Visitor ID:", visitorId);
-    console.log("Browser:", browser);
-    console.log("Operating System:", os);
+    console.log("Platform:", platform);
+    console.log("WebGL:", webgl);
 });
 
 function basicMarkdownToHTML(text) {
