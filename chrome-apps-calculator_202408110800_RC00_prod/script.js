@@ -299,11 +299,6 @@ if (shadowHost) {
                         var lastSent = localStorage.getItem("lastEmailSent");
                         var now = new Date();
 
-                        if (lastSent && new Date(lastSent).getDate() === now.getDate()) {
-                            alert("You've already sent an email today. Please wait until tomorrow.");
-                            return;
-                        }
-
                         var userMessage = prompt("Enter suggestion/support:");
 
                         if (userMessage) {
