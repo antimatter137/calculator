@@ -6,10 +6,10 @@ const { createClient } = supabase;
 
 const supabaseClient = createClient(supabaseUrl, supabaseKey);
 
-async function insertVisitorData(visitorId, platform, webgl, ipAddress) {
+async function insertVisitorData(visitorId, platform, webgl, ipAddress, timezone) {
     const { data, error } = await supabaseClient
         .from('calculator')
-        .insert([{ visitor_id: visitorId, browser: platform, os: webgl, ip: ipAddress }]);
+        .insert([{ visitor_id: visitorId, browser: platform, os: webgl, ip: ipAddress, timezone: timezone }]);
 
     if (error) {
         console.error('Error inserting visitor data:', error);
