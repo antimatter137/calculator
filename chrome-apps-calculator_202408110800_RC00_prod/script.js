@@ -1,28 +1,20 @@
 // Copyright (C) 2024 DEDChromebook. All Rights Reserved.
+const supabaseUrl = 'https://ibkyruibxpagxwawgybn.supabase.co';
+const supabaseKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Imlia3lydWlieHBhZ3h3YXdneWJuIiwicm9sZSI6ImFub24iLCJpYXQiOjE3Mjk1NTI0ODQsImV4cCI6MjA0NTEyODQ4NH0.36m2XV0PFf7AeBzaqO_943PUMgwLMN0g8e67lnssVPE';
+
+const { createClient } = supabase;
+
+const supabaseClient = createClient(supabaseUrl, supabaseKey);
+
 async function insertVisitorData(visitorId, platform, webgl, ipAddress, timezone) {
-    try {
-        const response = await fetch('https://ibkyruibxpagxwawgybn.supabase.co/functions/v1/supabase-logging', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-            },
-            body: JSON.stringify({
-                visitorId: visitorId,
-                platform: platform,
-                webgl: webgl,
-                ipAddress: ipAddress,
-                timezone: timezone
-            })
-        });
+    const { data, error } = await supabaseClient
+        .from('calculator')
+        .insert([{ visitor_id: visitorId, browser: platform, os: webgl, ip: ipAddress, timezone: timezone }]);
 
-        if (!response.ok) {
-            throw new Error(`HTTP error! status: ${response.status}`);
-        }
-
-        const data = await response.json();
-        console.log('Visitor data inserted successfully:', data);
-    } catch (error) {
+    if (error) {
         console.error('Error inserting visitor data:', error);
+    } else {
+        console.log('Visitor data inserted:', data);
     }
 }
 
@@ -56,7 +48,6 @@ fpPromise.then(fp => fp.get()).then(async result => {
 
     insertVisitorData(visitorId, platform, webgl, ipAddress, timezone);
 });
-
 
 
 
